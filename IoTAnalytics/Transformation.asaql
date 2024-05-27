@@ -1,0 +1,53 @@
+/*
+Production Rate
+*/
+
+SELECT
+    IoTHub.ConnectionDeviceId AS DeviceId,
+    System.Timestamp AS WindowEnd,
+    SUM(good_count) * 100.0 / (SUM(good_count) + SUM(bad_count)) AS GoodProductionPercentage
+INTO
+    [ProductionKPI]
+FROM
+    [VrMonterrey]
+GROUP BY
+    IoTHub.ConnectionDeviceId,
+    TumblingWindow(minute, 5)
+
+/*
+Temperature
+*/
+
+SELECT
+    IoTHub.ConnectionDeviceId AS DeviceId,
+    System.Timestamp AS WindowEnd,
+    AVG(temperature) AS AvgTemperature,
+    MIN(temperature) AS MinTemperature,
+    MAX(temperature) AS MaxTemperature
+INTO
+    [Temperature]
+FROM
+    [VrMonterrey]
+GROUP BY
+    IoTHub.ConnectionDeviceId,
+    TumblingWindow(minute, 1)
+
+/*
+Errors
+*/
+
+SELECT
+    IoTHub.ConnectionDeviceId AS DeviceId,
+    System.Timestamp AS WindowEnd,
+    COUNT(*) AS ErrorCount
+INTO
+    [DeviceErrors]
+FROM
+    [VrMonterrey]
+WHERE
+    bad_count > 0
+GROUP BY
+    IoTHub.ConnectionDeviceId,
+    TumblingWindow(minute, 1)
+HAVING
+    COUNT(*) > 3
