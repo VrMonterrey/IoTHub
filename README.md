@@ -252,9 +252,9 @@ If a device error occurs (of any type):
 2. In the function, check for any `DeviceError` events.
 3. If an error is detected, use an email service (such as SendGrid) to send an email notification.
 
-## Data Flow Diagram
+## Data Flow Description
 
-The following diagram illustrates the data flow and business logic implementation:
+The following text illustrates the data flow and business logic implementation:
 
 1. **Error Handling**:
     - Device experiences more than 3 errors in under 1 minute.
