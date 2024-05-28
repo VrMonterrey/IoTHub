@@ -1,0 +1,27 @@
+{
+    "Name": "ProductionKPIInput",
+    "Type": "Data Stream",
+    "DataSourceType": "Blob Storage",
+    "BlobStorageProperties": {
+        "StorageAccounts": [
+            {
+                "AccountName": "vrmonterrey",
+                "AccountKey": null
+            }
+        ],
+        "Container": "productionkpi",
+        "PathPattern": "",
+        "DateFormat": "yyyy/MM/dd",
+        "TimeFormat": "HH",
+        "SourcePartitionCount": 1,
+        "AuthenticationMode": "ConnectionString"
+    },
+    "DataSourceCredentialDomain": "4efa5ddd-ce32-4b4a-b03d-12b009dd41de.StreamAnalystics",
+    "Serialization": {
+        "Type": "Json",
+        "Encoding": "UTF8"
+    },
+    "PartitionKey": "",
+    "CompressionType": "None",
+    "ScriptType": "Input"
+}

@@ -1,0 +1,19 @@
+{
+    "Name": "ProductionKPIEH",
+    "DataSourceType": "Event Hub",
+    "EventHubProperties": {
+        "ServiceBusNamespace": "vrmonterrey",
+        "EventHubName": "productionkpi",
+        "SharedAccessPolicyName": "IoTAnalytics_ProductionKPIEH_policy",
+        "SharedAccessPolicyKey": null,
+        "PropertyColumns": [],
+        "AuthenticationMode": "ConnectionString"
+    },
+    "DataSourceCredentialDomain": "7b0caaa3-be50-4ce1-ab0b-c31511a58137.StreamAnalystics",
+    "Serialization": {
+        "Type": "Json",
+        "Encoding": "UTF8",
+        "Format": "LineSeparated"
+    },
+    "ScriptType": "Output"
+}

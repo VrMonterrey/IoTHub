@@ -1,0 +1,27 @@
+{
+    "Name": "DeviceErrorsInput",
+    "Type": "Data Stream",
+    "DataSourceType": "Blob Storage",
+    "BlobStorageProperties": {
+        "StorageAccounts": [
+            {
+                "AccountName": "vrmonterrey",
+                "AccountKey": null
+            }
+        ],
+        "Container": "deviceerrors",
+        "PathPattern": "",
+        "DateFormat": "yyyy/MM/dd",
+        "TimeFormat": "HH",
+        "SourcePartitionCount": 1,
+        "AuthenticationMode": "ConnectionString"
+    },
+    "DataSourceCredentialDomain": "81a67226-4b62-482e-92e8-3c31fad51c71.StreamAnalystics",
+    "Serialization": {
+        "Type": "Json",
+        "Encoding": "UTF8"
+    },
+    "PartitionKey": "",
+    "CompressionType": "None",
+    "ScriptType": "Input"
+}

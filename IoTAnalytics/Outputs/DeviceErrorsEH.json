@@ -1,0 +1,19 @@
+{
+    "Name": "DeviceErrorsEH",
+    "DataSourceType": "Event Hub",
+    "EventHubProperties": {
+        "ServiceBusNamespace": "vrmonterrey",
+        "EventHubName": "deviceerrors",
+        "SharedAccessPolicyName": "IoTAnalytics_DeviceErrorsEH_policy",
+        "SharedAccessPolicyKey": null,
+        "PropertyColumns": [],
+        "AuthenticationMode": "ConnectionString"
+    },
+    "DataSourceCredentialDomain": "c941bef8-0aa6-40a3-9c78-eb1e95f236e9.StreamAnalystics",
+    "Serialization": {
+        "Type": "Json",
+        "Encoding": "UTF8",
+        "Format": "LineSeparated"
+    },
+    "ScriptType": "Output"
+}

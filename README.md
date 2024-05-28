@@ -74,11 +74,13 @@ Data calculations are performed using Azure Stream Analytics Jobs. Below are the
 SELECT
     IoTHub.ConnectionDeviceId AS DeviceId,
     System.Timestamp AS WindowEnd,
-    SUM(good_count) * 100.0 / (SUM(good_count) + SUM(bad_count)) AS GoodProductionPercentage
+    SUM(GoodCount) * 100.0 / (SUM(GoodCount) + SUM(BadCount)) AS GoodProductionPercentage
 INTO
     [ProductionKPI]
 FROM
     [VrMonterrey]
+WHERE
+    GetMetadataPropertyValue([VrMonterrey], '[User].[type]') = 'Telemetry'
 GROUP BY
     IoTHub.ConnectionDeviceId,
     TumblingWindow(minute, 5)
@@ -90,7 +92,7 @@ GROUP BY
 - **WindowEnd**: Timestamp indicating the end of the 5-minute window.
 - **GoodProductionPercentage**: The percentage of good production calculated as:
   \[
-  \text{GoodProductionPercentage} = \frac{\text{SUM(good_count)} \times 100.0}{\text{SUM(good_count)} + \text{SUM(bad_count)}}
+  \text{GoodProductionPercentage} = \frac{\text{SUM(GoodCount)} \times 100.0}{\text{SUM(GoodCount)} + \text{SUM(BadCount)}}
   \]
 
 - **Group By**: Data is grouped by the device ID and a tumbling window of 5 minutes.
@@ -105,13 +107,15 @@ GROUP BY
 SELECT
     IoTHub.ConnectionDeviceId AS DeviceId,
     System.Timestamp AS WindowEnd,
-    AVG(temperature) AS AvgTemperature,
-    MIN(temperature) AS MinTemperature,
-    MAX(temperature) AS MaxTemperature
+    AVG(Temperature) AS AvgTemperature,
+    MIN(Temperature) AS MinTemperature,
+    MAX(Temperature) AS MaxTemperature
 INTO
     [Temperature]
 FROM
     [VrMonterrey]
+WHERE
+    GetMetadataPropertyValue([VrMonterrey], '[User].[type]') = 'Telemetry'
 GROUP BY
     IoTHub.ConnectionDeviceId,
     TumblingWindow(minute, 1)
@@ -136,27 +140,24 @@ GROUP BY
 ```sql
 SELECT
     IoTHub.ConnectionDeviceId AS DeviceId,
-    System.Timestamp AS WindowEnd,
-    COUNT(*) AS ErrorCount
+    System.Timestamp AS CurrentTime
 INTO
     [DeviceErrors]
 FROM
     [VrMonterrey]
 WHERE
-    bad_count > 0
+    GetMetadataPropertyValue([VrMonterrey], '[User].[type]') = 'DeviceError'
 GROUP BY
     IoTHub.ConnectionDeviceId,
-    TumblingWindow(minute, 1)
+    SlidingWindow(minute, 1)
 HAVING
-    COUNT(*) > 3
+    COUNT(newErrorsCount) > 3
 ```
 
 ### Explanation
 
 - **DeviceId**: Identifier for the device sending data.
 - **WindowEnd**: Timestamp indicating the end of the 1-minute window.
-- **ErrorCount**: The number of errors detected in the 1-minute window.
-- **Filter**: Only include records where `bad_count` is greater than 0.
 - **Group By**: Data is grouped by the device ID and a tumbling window of 1 minute.
 - **Having Clause**: Ensures that only windows with more than 3 errors are selected.
 
@@ -186,30 +187,10 @@ If a device experiences more than 3 errors in under 1 minute:
 
 - **Trigger Emergency Stop**: Immediately trigger Emergency Stop on the device.
 
-### Query
-
-```sql
-SELECT
-    IoTHub.ConnectionDeviceId AS DeviceId,
-    System.Timestamp AS WindowEnd,
-    COUNT(*) AS ErrorCount
-INTO
-    [DeviceErrors]
-FROM
-    [VrMonterrey]
-WHERE
-    bad_count > 0
-GROUP BY
-    IoTHub.ConnectionDeviceId,
-    TumblingWindow(minute, 1)
-HAVING
-    COUNT(*) > 3
-```
-
 ### Implementation with Azure Functions
 
 1. Set up an Azure Function to listen to the Event Hub where `DeviceErrors` data is streamed.
-2. In the function, check if the `ErrorCount` exceeds 3.
+2. In the function, check if there is a row for the specified device signalling the occurrence of more than 3 errors.
 3. If the condition is met, use the Azure IoT SDK to invoke the `emergencyStop` direct method on the device.
 
 ### 2. Production Rate Monitoring
@@ -217,22 +198,6 @@ HAVING
 If a device experiences a drop in good production rate below 90%:
 
 - **Decrease Desired Production Rate**: Decrease the `ProductionRate` by 10 points.
-
-### Query
-
-```sql
-SELECT
-    IoTHub.ConnectionDeviceId AS DeviceId,
-    System.Timestamp AS WindowEnd,
-    SUM(good_count) * 100.0 / (SUM(good_count) + SUM(bad_count)) AS GoodProductionPercentage
-INTO
-    [ProductionKPI]
-FROM
-    [VrMonterrey]
-GROUP BY
-    IoTHub.ConnectionDeviceId,
-    TumblingWindow(minute, 5)
-```
 
 ### Implementation with Azure Functions
 

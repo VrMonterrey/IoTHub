@@ -1,0 +1,27 @@
+{
+    "Name": "TemperatureInput",
+    "Type": "Data Stream",
+    "DataSourceType": "Blob Storage",
+    "BlobStorageProperties": {
+        "StorageAccounts": [
+            {
+                "AccountName": "vrmonterrey",
+                "AccountKey": null
+            }
+        ],
+        "Container": "temperature",
+        "PathPattern": "",
+        "DateFormat": "yyyy/MM/dd",
+        "TimeFormat": "HH",
+        "SourcePartitionCount": 1,
+        "AuthenticationMode": "ConnectionString"
+    },
+    "DataSourceCredentialDomain": "01cd5b33-b7f4-4605-995b-1c9d9cb73a68.StreamAnalystics",
+    "Serialization": {
+        "Type": "Json",
+        "Encoding": "UTF8"
+    },
+    "PartitionKey": "",
+    "CompressionType": "None",
+    "ScriptType": "Input"
+}

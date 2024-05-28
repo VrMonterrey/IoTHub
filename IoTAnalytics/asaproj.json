@@ -5,6 +5,46 @@
         {
             "filePath": "JobConfig.json",
             "subType": "JobConfig"
+        },
+        {
+            "filePath": "Outputs/ProductionKPI.json",
+            "subType": "Output"
+        },
+        {
+            "filePath": "Inputs/ProductionKPIInput.json",
+            "subType": "Input"
+        },
+        {
+            "filePath": "Inputs/TemperatureInput.json",
+            "subType": "Input"
+        },
+        {
+            "filePath": "Inputs/DeviceErrorsInput.json",
+            "subType": "Input"
+        },
+        {
+            "filePath": "Outputs/DeviceErrors.json",
+            "subType": "Output"
+        },
+        {
+            "filePath": "Outputs/Temperature.json",
+            "subType": "Output"
+        },
+        {
+            "filePath": "Inputs/VrMonterrey.json",
+            "subType": "Input"
+        },
+        {
+            "filePath": "Outputs/DeviceErrorsEH.json",
+            "subType": "Output"
+        },
+        {
+            "filePath": "Outputs/ProductionKPIEH.json",
+            "subType": "Output"
+        },
+        {
+            "filePath": "Outputs/TemperatureEH.json",
+            "subType": "Output"
         }
     ]
 }

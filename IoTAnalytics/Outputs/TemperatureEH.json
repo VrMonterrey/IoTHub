@@ -1,0 +1,19 @@
+{
+    "Name": "TemperatureEH",
+    "DataSourceType": "Event Hub",
+    "EventHubProperties": {
+        "ServiceBusNamespace": "vrmonterrey",
+        "EventHubName": "temperature",
+        "SharedAccessPolicyName": "IoTAnalytics_TemperatureEH_policy",
+        "SharedAccessPolicyKey": null,
+        "PropertyColumns": [],
+        "AuthenticationMode": "ConnectionString"
+    },
+    "DataSourceCredentialDomain": "718f3fd6-f9a5-4b15-ba52-a0b68ba01558.StreamAnalystics",
+    "Serialization": {
+        "Type": "Json",
+        "Encoding": "UTF8",
+        "Format": "LineSeparated"
+    },
+    "ScriptType": "Output"
+}

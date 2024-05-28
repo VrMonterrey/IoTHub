@@ -5,11 +5,13 @@ Production Rate
 SELECT
     IoTHub.ConnectionDeviceId AS DeviceId,
     System.Timestamp AS WindowEnd,
-    SUM(good_count) * 100.0 / (SUM(good_count) + SUM(bad_count)) AS GoodProductionPercentage
+    SUM(GoodCount) * 100.0 / (SUM(GoodCount) + SUM(BadCount)) AS GoodProductionPercentage
 INTO
     [ProductionKPI]
 FROM
     [VrMonterrey]
+WHERE
+    GetMetadataPropertyValue([VrMonterrey], '[User].[type]') = 'Telemetry'
 GROUP BY
     IoTHub.ConnectionDeviceId,
     TumblingWindow(minute, 5)
@@ -21,13 +23,15 @@ Temperature
 SELECT
     IoTHub.ConnectionDeviceId AS DeviceId,
     System.Timestamp AS WindowEnd,
-    AVG(temperature) AS AvgTemperature,
-    MIN(temperature) AS MinTemperature,
-    MAX(temperature) AS MaxTemperature
+    AVG(Temperature) AS AvgTemperature,
+    MIN(Temperature) AS MinTemperature,
+    MAX(Temperature) AS MaxTemperature
 INTO
     [Temperature]
 FROM
     [VrMonterrey]
+WHERE
+    GetMetadataPropertyValue([VrMonterrey], '[User].[type]') = 'Telemetry'
 GROUP BY
     IoTHub.ConnectionDeviceId,
     TumblingWindow(minute, 1)
@@ -38,16 +42,15 @@ Errors
 
 SELECT
     IoTHub.ConnectionDeviceId AS DeviceId,
-    System.Timestamp AS WindowEnd,
-    COUNT(*) AS ErrorCount
+    System.Timestamp AS CurrentTime
 INTO
     [DeviceErrors]
 FROM
     [VrMonterrey]
 WHERE
-    bad_count > 0
+    GetMetadataPropertyValue([VrMonterrey], '[User].[type]') = 'DeviceError'
 GROUP BY
     IoTHub.ConnectionDeviceId,
-    TumblingWindow(minute, 1)
+    SlidingWindow(minute, 1)
 HAVING
-    COUNT(*) > 3
+    COUNT(newErrorsCount) > 3
