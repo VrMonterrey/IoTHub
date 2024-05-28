@@ -1,6 +1,6 @@
-# Data Calculations Documentation
+# IoT Agent
 
-This documentation provides instructions on how to perform data calculations on the cloud using Azure Stream Analytics Jobs and store the results in the IoT platform.
+This documentation introduces the agent application, a key component that acts as a bridge between your OPC Server and Azure IoT Hub. The agent facilitates communication by translating data from the OPC Server into a format compatible with Azure IoT Hub for seamless data transfer to the cloud.
 
 ## Prerequisites
 
